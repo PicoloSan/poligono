@@ -6,22 +6,16 @@ interface
 
 uses
   Classes, mvMapViewer, SysUtils, csvdataset, DB, Forms, Controls, Graphics,
-  Dialogs, DBGrids, ExtCtrls, Buttons, StdCtrls, mvTypes;
+  Dialogs, DBGrids, ExtCtrls, Buttons, StdCtrls, Menus, mvTypes;
 
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
-    BitBtn1: TBitBtn;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    ButtonCarregarPoligono: TBitBtn;
-    BitBtn3: TBitBtn;
-    ButtonTestarPontos: TBitBtn;
-    ButtonDesenhar: TBitBtn;
+    Bevel1: TBevel;
+    Bevel2: TBevel;
+    Bevel3: TBevel;
     CSV_Poligono: TCSVDataset;
     CSV_Pontos: TCSVDataset;
     DataSource1: TDataSource;
@@ -31,24 +25,41 @@ type
     ImageList1: TImageList;
     Label1: TLabel;
     Label2: TLabel;
+    MainMenu1: TMainMenu;
     MapView1: TMapView;
+    MenuItem1: TMenuItem;
+    mnuGoogleMaps: TMenuItem;
+    mnuWaze: TMenuItem;
+    mnuOpenStreetMaps: TMenuItem;
+    mnuArcGIS: TMenuItem;
+    mnuPontosAbrirCSV: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
+    mnuPoligonoAbrirCSV: TMenuItem;
+    mnuPoligonoClassificar: TMenuItem;
+    mnuPoligonoCarregar: TMenuItem;
+    mnuPontosTestar: TMenuItem;
+    mnuPontosDesenhar: TMenuItem;
     OpenDialog1: TOpenDialog;
-    procedure BitBtn1Click(Sender: TObject);
-    procedure BitBtn3Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
-    procedure Button4Click(Sender: TObject);
-    procedure ButtonCarregarPoligonoClick(Sender: TObject);
-    procedure ButtonDesenharClick(Sender: TObject);
-    procedure ButtonTestarPontosClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure mnuArcGISClick(Sender: TObject);
+    procedure mnuGoogleMapsClick(Sender: TObject);
+    procedure mnuOpenStreetMapsClick(Sender: TObject);
+    procedure mnuPoligonoAbrirCSVClick(Sender: TObject);
+    procedure mnuPoligonoCarregarClick(Sender: TObject);
+    procedure mnuPoligonoClassificarClick(Sender: TObject);
+    procedure mnuPontosAbrirCSVClick(Sender: TObject);
+    procedure mnuPontosDesenharClick(Sender: TObject);
+    procedure mnuPontosTestarClick(Sender: TObject);
+    procedure mnuWazeClick(Sender: TObject);
   private
     function RetornaCor(Cor: String): integer;
     procedure CarregarPontosPoligono;
     procedure TestarPontos;
     procedure DesenharMapa;
+    procedure PontosAbrirCSV;
+    procedure PoligonoAbrirCSV;
     function PontoDentroDoPoligono(lat, long: Double): Boolean;
   public
 
@@ -177,13 +188,7 @@ begin
   end;
 end;
 
-
-procedure TForm1.ButtonCarregarPoligonoClick(Sender: TObject);
-begin
-  CarregarPontosPoligono;
-end;
-
-procedure TForm1.BitBtn1Click(Sender: TObject);
+procedure TForm1.PoligonoAbrirCSV;
 begin
   if OpenDialog1.Execute then
   begin
@@ -199,7 +204,7 @@ begin
   end;
 end;
 
-procedure TForm1.BitBtn3Click(Sender: TObject);
+procedure TForm1.PontosAbrirCSV;
 begin
   if OpenDialog1.Execute then
   begin
@@ -214,38 +219,6 @@ begin
     DBGridTeste.Columns[1].Width := 60;
   end;
 end;
-
-procedure TForm1.Button1Click(Sender: TObject);
-begin
-  MapView1.MapProvider:='Google Maps';
-end;
-
-procedure TForm1.Button2Click(Sender: TObject);
-begin
-  MapView1.MapProvider:='Waze Background';
-end;
-
-procedure TForm1.Button3Click(Sender: TObject);
-begin
-  MapView1.MapProvider:='OpenStreetMap Standard';
-end;
-
-procedure TForm1.Button4Click(Sender: TObject);
-begin
-  MapView1.MapProvider:='ArcGIS World Street Map';
-end;
-
-procedure TForm1.ButtonDesenharClick(Sender: TObject);
-begin
-  DesenharMapa;
-end;
-
-
-procedure TForm1.ButtonTestarPontosClick(Sender: TObject);
-begin
-  TestarPontos;
-end;
-
 
 function TForm1.RetornaCor(Cor: String): integer;
 var
@@ -277,6 +250,56 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   MapView1.Active := True;
+end;
+
+procedure TForm1.mnuArcGISClick(Sender: TObject);
+begin
+  MapView1.MapProvider:='ArcGIS World Street Map';
+end;
+
+procedure TForm1.mnuGoogleMapsClick(Sender: TObject);
+begin
+  MapView1.MapProvider:='Google Maps';
+end;
+
+procedure TForm1.mnuOpenStreetMapsClick(Sender: TObject);
+begin
+  MapView1.MapProvider:='OpenStreetMap Standard';
+end;
+
+procedure TForm1.mnuWazeClick(Sender: TObject);
+begin
+  MapView1.MapProvider:='Waze Background';
+end;
+
+procedure TForm1.mnuPoligonoAbrirCSVClick(Sender: TObject);
+begin
+  PoligonoAbrirCSV;
+end;
+
+procedure TForm1.mnuPoligonoCarregarClick(Sender: TObject);
+begin
+  CarregarPontosPoligono;
+end;
+
+procedure TForm1.mnuPoligonoClassificarClick(Sender: TObject);
+begin
+  //TO DO: Algoritmo para Classificar os Pontos com propósito de Desenhar o Polígono.
+end;
+
+procedure TForm1.mnuPontosAbrirCSVClick(Sender: TObject);
+begin
+  PontosAbrirCSV;
+end;
+
+procedure TForm1.mnuPontosDesenharClick(Sender: TObject);
+begin
+  DesenharMapa;
+end;
+
+procedure TForm1.mnuPontosTestarClick(Sender: TObject);
+begin
+  TestarPontos;
 end;
 
 end.
